@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-temate',
-  templateUrl: './temate.component.html',
+  selector: 'app-template',
+  templateUrl: './template.component.html',
   styles: []
 })
-export class TemateComponent implements OnInit {
+export class TemplateComponent implements OnInit {
 
   constructor() { }
 
