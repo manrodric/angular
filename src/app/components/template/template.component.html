@@ -1,52 +1,82 @@
-<h4>Formularios</h4>
+<h4>Utilitario</h4>
 <hr>
-<form>
+<div [hidden]="submitted">
+<form  (ngSubmit)="onSubmit()">
 
   <div>
 
     <div class="form-group row">
-      <label class="col-2 col-form-label">Nombre</label>
-      <div class="col-8">
-
-        <input class="form-control"
-               type="text"
-               placeholder="Nombre">
+      <label class="col-2 col-form-label">Tipo Operaciones</label>
+      <div class="col-md-4">
+      <select [(ngModel)] = "requestData.tipoOperacion"
+        class="form-control" name="tipoOperacion">
+      <option value="">Seleccione un tipo de operacion</option>
+      <option *ngFor="let tipoOperacion of tipoOperaciones"
+      [value]="tipoOperacion.codigo">{{tipoOperacion.descripcion}}</option>
+      </select>
       </div>
+    </div>
+
+
+
+
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Celular</label>
+      <div class="col-4">
+      <input type="text" class="form-control"  required [(ngModel)]="requestData.numCelular" name="numCelular" >
+    </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-2 col-form-label">Apellido</label>
-      <div class="col-8">
-
-        <input class="form-control"
-               type="text"
-               placeholder="Apellido">
+      <label class="col-2 col-form-label">Tipo Usuario</label>
+      <div class="col-md-4">
+      <select [(ngModel)] = "requestData.usuario"
+        class="form-control" name="usuario">
+      <option value="">Seleccione un tipo de usuario</option>
+      <option *ngFor="let usuario of usuarios"
+      [value]="usuario.valor">{{usuario.descripcion}}</option>
+      </select>
       </div>
     </div>
 
-  </div>
 
-  <div class="form-group row">
-    <label class="col-2 col-form-label">Correo</label>
-    <div class="col-md-8">
-
-      <input class="form-control"
-             type="email"
-             placeholder="Correo electrónico">
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Numero Tarjeta</label>
+      <div class="col-4">
+      <input type="text" class="form-control"  required [(ngModel)]="requestData.numTarjeta" name="numTarjeta">
     </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Operador</label>
+      <div class="col-md-4">
+      <select [(ngModel)] = "requestData.operador"
+        class="form-control" name="operador">
+      <option value="">Seleccione un operador</option>
+      <option *ngFor="let operador of operadores"
+      [value]="operador.valor">{{operador.nombre}}</option>
+      </select>
+      </div>
+    </div>
+
+
   </div>
 
-
-
+  
+  <pre>{{requestData | json}}</pre>
   <div class="form-group row">
     <label class="col-2 col-form-label">&nbsp;</label>
     <div class="input-group col-md-8">
       <button type="submit" class="btn btn-outline-primary">
-        Guardar
+        Enviar
       </button>
     </div>
   </div>
 
-  <button type="button" class="btn btn-danger">Danger</button>
 
 </form>
+</div>
+<div [hidden]="!submitted">
+  <h4>Transacción realizada correctamente!</h4>
+  
+</div>
