@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestData } from '../../model/requestData/requestData';
 import {RequestDataService} from '../../service/request-data.service';
 import {TipoOperacion} from '../../model/requestData/tipoOperacion';
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-template',
@@ -9,7 +10,7 @@ import {TipoOperacion} from '../../model/requestData/tipoOperacion';
   styles: []
 })
 export class TemplateComponent implements OnInit {
-
+  formulario: FormGroup;
   submitted = false;
   tipoOperaciones: TipoOperacion[];
   
@@ -41,16 +42,45 @@ export class TemplateComponent implements OnInit {
     }
 ]
 
-  constructor(private requestDataServiceService: RequestDataService) { }
+  constructor(
+    private requestDataServiceService: RequestDataService,
+    private formBuilder: FormBuilder) 
+    { }
 
   ngOnInit() {
 
     this.requestDataServiceService.getOperacion().subscribe(prueba=>this.tipoOperaciones=prueba);
 
-
-
+    this.formulario = this.formBuilder.group({
+      numCelular: [null,Validators.required],
+      tipoOperacion: [null],
+      usuario : [null],
+      numTarjeta : [null],
+      operador :  [null]
+      
+    });
+    this.onChanges();
+   
 
   }
+  resetar() {
+    this.formulario.reset();
+  }
+
+  onChanges() {
+    this.formulario.get('tipoOperacion').valueChanges
+    .subscribe(selectedOperacion => {
+        if (selectedOperacion != '3') {
+            this.formulario.get('operador').reset();
+            this.formulario.get('operador').disable();
+        }
+        else{
+          this.formulario.get('operador').enable();
+        }
+        
+    });
+   
+}
 
   newRequestData(): void {
     this.submitted = false;
