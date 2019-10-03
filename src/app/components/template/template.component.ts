@@ -3,6 +3,7 @@ import { RequestData } from '../../model/requestData/requestData';
 import {RequestDataService} from '../../service/request-data.service';
 import {TipoOperacion} from '../../model/requestData/tipoOperacion';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
+import {TipoOperacionEnum,TipoUsuario} from '../../service/request-data.interface'
 
 @Component({
   selector: 'app-template',
@@ -13,14 +14,15 @@ export class TemplateComponent implements OnInit {
   formulario: FormGroup;
   submitted = false;
   tipoOperaciones: TipoOperacion[];
-  
+  showNumCel: boolean = true;
 
-  requestData: Object ={
-    operador: "",
-    tipoOperacion:"",
-    usuario:""
-  }
-
+  //  requestData: Object ={
+  //    operador: "",
+  //    tipoOperacion:"",
+  //    usuario:""
+  //  }
+  requestData: RequestData = new RequestData();
+ 
   usuarios =  [{
     descripcion:"PERSONA NATURAL",valor:"1"}
     ,{descripcion:"PERSONA JURIDICA",valor:"2"}
@@ -56,28 +58,62 @@ export class TemplateComponent implements OnInit {
       tipoOperacion: [null],
       usuario : [null],
       numTarjeta : [null],
-      operador :  [null]
+      operador :  [null],
+      codigoUsuario: [null]
       
     });
+    //this.formulario.patchValue({usuario: '2'}); establecer valor
     this.onChanges();
-   
+    this.onChangesTipoUsuario();
 
   }
   resetar() {
     this.formulario.reset();
   }
 
-  onChanges() {
-    this.formulario.get('tipoOperacion').valueChanges
-    .subscribe(selectedOperacion => {
-        if (selectedOperacion != '3') {
-            this.formulario.get('operador').reset();
-            this.formulario.get('operador').disable();
+  onChangesTipoUsuario(){
+    this.formulario.get('usuario').valueChanges
+    .subscribe(selectedUsuario => {
+        if (selectedUsuario == TipoUsuario.Juridico.valor) {
+            this.showNumCel = false;  
+            this.formulario.get('numTarjeta').reset(); 
+            this.formulario.get('numTarjeta').disable();
         }
         else{
-          this.formulario.get('operador').enable();
+          this.showNumCel = true;
+          this.formulario.get('numTarjeta').enable();
+          this.formulario.get('codigoUsuario').disable();
+          
         }
         
+       
+    });
+
+  }
+
+
+
+  onChanges() {
+    
+    this.formulario.get('tipoOperacion').valueChanges
+    .subscribe(selectedOperacion => {
+        if(selectedOperacion == TipoOperacionEnum.ACTIVAR_SMS){
+          this.formulario.get('numCelular').reset();
+          this.formulario.get('numCelular').disable();
+          this.formulario.get('operador').disable();
+        }
+       else if (selectedOperacion == TipoOperacionEnum.CAMBIAR_OPERADOR_CEL) {
+            this.formulario.get('operador').reset();
+            this.formulario.get('operador').enable();
+            this.formulario.get('numCelular').enable();
+           
+            
+        }
+         else{
+           this.formulario.get('operador').disable();
+           this.formulario.get('numCelular').disable();
+         }
+         this.requestData.tipoOperacion = this.formulario.get('tipoOperacion').value;
     });
    
 }
@@ -88,16 +124,26 @@ export class TemplateComponent implements OnInit {
   }
 
   save() {
+    this.estableciendoValores();
+
     this.requestDataServiceService.sendRequest(this.requestData)
       .subscribe(
         data => {
-
-          
           console.log(data);
           this.submitted = true;
         },
         error => console.log(error));
+       
     this.requestData = new RequestData();
+  }
+
+  private estableciendoValores() {
+    this.formulario.controls['numCelular'].disable();
+    this.requestData.tipoUsuario = this.formulario.get('usuario').value;
+    this.requestData.numTarjeta = this.formulario.get('numTarjeta').value;
+   // this.requestData.numCelular = this.formulario.get('numCelular').value;
+   
+    this.requestData.operador = this.formulario.get('operador').value;
   }
 
   onSubmit() {
