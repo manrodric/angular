@@ -75,9 +75,12 @@ export class TemplateComponent implements OnInit {
     this.formulario.get('usuario').valueChanges
     .subscribe(selectedUsuario => {
         if (selectedUsuario == TipoUsuario.Juridico.valor) {
+          
             this.showNumCel = false;  
             this.formulario.get('numTarjeta').reset(); 
             this.formulario.get('numTarjeta').disable();
+            this.formulario.get('codigoUsuario').reset(); 
+            this.formulario.get('codigoUsuario').enable();
         }
         else{
           this.showNumCel = true;
@@ -100,13 +103,14 @@ export class TemplateComponent implements OnInit {
         if(selectedOperacion == TipoOperacionEnum.ACTIVAR_SMS){
           this.formulario.get('numCelular').reset();
           this.formulario.get('numCelular').disable();
+          this.formulario.get('operador').reset();
           this.formulario.get('operador').disable();
         }
        else if (selectedOperacion == TipoOperacionEnum.CAMBIAR_OPERADOR_CEL) {
             this.formulario.get('operador').reset();
             this.formulario.get('operador').enable();
             this.formulario.get('numCelular').enable();
-           
+            this.formulario.get('codigoUsuario').enable();
             
         }
          else{
