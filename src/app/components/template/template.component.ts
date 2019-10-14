@@ -14,8 +14,10 @@ export class TemplateComponent implements OnInit {
   formulario: FormGroup;
   submitted = false;
   tipoOperaciones: TipoOperacion[];
+  showNumTarjeta: boolean = true;
   showNumCel: boolean = true;
-
+  showOperador: boolean = true;
+  showCodigoUsuario : boolean = true;
   //  requestData: Object ={
   //    operador: "",
   //    tipoOperacion:"",
@@ -76,14 +78,16 @@ export class TemplateComponent implements OnInit {
     .subscribe(selectedUsuario => {
         if (selectedUsuario == TipoUsuario.Juridico.valor) {
           
-            this.showNumCel = false;  
+            this.showNumTarjeta = false;  
+            this.showCodigoUsuario = true;
             this.formulario.get('numTarjeta').reset(); 
             this.formulario.get('numTarjeta').disable();
-            this.formulario.get('codigoUsuario').reset(); 
+           this.formulario.get('codigoUsuario').reset(); 
             this.formulario.get('codigoUsuario').enable();
         }
         else{
-          this.showNumCel = true;
+          this.showNumTarjeta = true;
+          this.showCodigoUsuario = false;
           this.formulario.get('numTarjeta').enable();
           this.formulario.get('codigoUsuario').disable();
           
@@ -101,19 +105,27 @@ export class TemplateComponent implements OnInit {
     this.formulario.get('tipoOperacion').valueChanges
     .subscribe(selectedOperacion => {
         if(selectedOperacion == TipoOperacionEnum.ACTIVAR_SMS){
+          this.showNumCel = false;
+          this.showOperador = false;
+          
           this.formulario.get('numCelular').reset();
           this.formulario.get('numCelular').disable();
           this.formulario.get('operador').reset();
           this.formulario.get('operador').disable();
+
         }
        else if (selectedOperacion == TipoOperacionEnum.CAMBIAR_OPERADOR_CEL) {
+         this.showNumCel = true;
+         this.showOperador = true;
             this.formulario.get('operador').reset();
             this.formulario.get('operador').enable();
             this.formulario.get('numCelular').enable();
-            this.formulario.get('codigoUsuario').enable();
+      
             
         }
          else{
+          this.showOperador = false;
+          this.showNumCel = false;
            this.formulario.get('operador').disable();
            this.formulario.get('numCelular').disable();
          }
