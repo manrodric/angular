@@ -92,7 +92,7 @@ export class TemplateComponent implements OnInit {
           this.formulario.get('codigoUsuario').disable();
           
         }
-        
+        this.requestData.tipoUsuario = this.formulario.get('usuario').value;
        
     });
 
@@ -130,6 +130,7 @@ export class TemplateComponent implements OnInit {
            this.formulario.get('numCelular').disable();
          }
          this.requestData.tipoOperacion = this.formulario.get('tipoOperacion').value;
+        
     });
    
 }
@@ -150,20 +151,26 @@ export class TemplateComponent implements OnInit {
         },
         error => console.log(error));
        
-    this.requestData = new RequestData();
+    this.resetar();
   }
 
   private estableciendoValores() {
-    this.formulario.controls['numCelular'].disable();
+   // this.formulario.controls['numCelular'].disable();
     this.requestData.tipoUsuario = this.formulario.get('usuario').value;
     this.requestData.numTarjeta = this.formulario.get('numTarjeta').value;
-   // this.requestData.numCelular = this.formulario.get('numCelular').value;
+    this.requestData.numCelular = this.formulario.get('numCelular').value;
    
     this.requestData.operador = this.formulario.get('operador').value;
+    this.requestData.codigoUsuario = this.formulario.get('codigoUsuario').value;
   }
 
   onSubmit() {
     this.save();
   }
+
+  nuevo(){
+    this.ngOnInit();
+  }
+  
 
 }
