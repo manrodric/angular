@@ -4,6 +4,7 @@ import {RequestDataService} from '../../service/request-data.service';
 import {TipoOperacion} from '../../model/requestData/tipoOperacion';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import {TipoOperacionEnum,TipoUsuario} from '../../service/request-data.interface'
+import {NotificationService} from '../../service/notification.service';
 
 @Component({
   selector: 'app-template',
@@ -48,7 +49,7 @@ export class TemplateComponent implements OnInit {
 
   constructor(
     private requestDataServiceService: RequestDataService,
-    private formBuilder: FormBuilder) 
+    private formBuilder: FormBuilder,private notifyService : NotificationService) 
     { }
 
   ngOnInit() {
@@ -148,10 +149,16 @@ export class TemplateComponent implements OnInit {
         data => {
           console.log(data);
           this.submitted = true;
+     
+          this.showToaster();
         },
+       
         error => console.log(error));
        
     this.resetar();
+  
+
+    
   }
 
   private estableciendoValores() {
@@ -171,6 +178,12 @@ export class TemplateComponent implements OnInit {
   nuevo(){
     this.ngOnInit();
   }
-  
+  showToaster(){
+  	this.notifyService.showSuccess("Transacción realizada!!", "Notificacion")
+  }
+
+  showError(){
+    this.notifyService.showError("Ocurrio un problema inesperado", "Notificacion")
+  }
 
 }

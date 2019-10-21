@@ -1,7 +1,7 @@
 <h4>Utilitario</h4>
 <hr>
 <!-- <div [hidden]="submitted"> -->
-<form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+<form [formGroup]="formulario" (ngSubmit)="onSubmit();">
 
 
   <div class="form-group row">
@@ -72,6 +72,7 @@
       <label class="col-2 col-form-label">&nbsp;</label>
       <div class="input-group col-md-8">
         <button type="submit" class="btn btn-outline-primary">
+            <!-- <button (click)="showError(submitted)"> -->
           Enviar
         </button>
       </div>
@@ -81,10 +82,7 @@
 
 </form>
 <!-- </div> -->
-<div *ngIf="submitted">
+<!-- <div *ngIf="submitted"> -->
   <!-- <h4>Transacción realizada correctamente!</h4> -->
-  <div class="alert alert-success" role="alert">
-    Transacción realizada correctamente!
-  </div>
-  
-</div>
+ 
+<!-- </div> -->
