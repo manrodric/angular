@@ -5,7 +5,7 @@
 
 
   <div class="form-group row">
-    <label class="col-2 col-form-label">Tipo Usuario</label>
+    <label class="col-2 col-form-label">Tipo Usuario:</label>
     <div class="col-md-4">
     <select 
       class="form-control" id="usuario" formControlName="usuario"  >
@@ -17,7 +17,7 @@
   </div>
 
     <div class="form-group row">
-      <label class="col-2 col-form-label">Tipo Operaciones</label>
+      <label class="col-2 col-form-label">Tipo Operaciones:</label>
       <div class="col-md-4">
       <select class="form-control" id="tipoOperacion" formControlName="tipoOperacion" >
       <option  disabled selected [ngValue]="null" >Seleccione un tipo de operacion</option>
@@ -28,7 +28,7 @@
     </div>
 
     <div class="form-group row" *ngIf="showNumTarjeta">
-      <label class="col-2 col-form-label">Numero Tarjeta</label>
+      <label class="col-2 col-form-label">Numero Tarjeta:</label>
       <div class="col-4">
       <input type="text" class="form-control"  id="numTarjeta" formControlName="numTarjeta">
     </div>
@@ -36,7 +36,7 @@
 
    
     <div class="form-group row" *ngIf="showCodigoUsuario" > 
-        <label class="col-2 col-form-label">Código Usuario</label>
+        <label class="col-2 col-form-label">Código Usuario:</label>
         <div class="col-4">
         <input type="text" class="form-control"  id="codigoUsuario" formControlName="codigoUsuario">
       </div>
@@ -48,19 +48,18 @@
 
 
     <div class="form-group row" *ngIf="showNumCel">
-      <label class="col-2 col-form-label">Celular</label>
+      <label class="col-2 col-form-label">Celular:</label>
       <div class="col-4">
       <input type="text" class="form-control" required maxlength="9"  id="numCelular"  formControlName="numCelular" >
     </div>
     </div>
-
-
+  
     <div class="form-group row" *ngIf="showOperador">
-      <label class="col-2 col-form-label">Operador</label>
+      <label class="col-2 col-form-label">Operador:</label>
       <div class="col-md-4">
       <select 
               class="form-control" id="operador" formControlName="operador" >
-      <option value="">Seleccione un operador</option>
+              <option  disabled selected [ngValue]="null">Seleccione un operador</option>
       <option *ngFor="let operador of operadores"
       [value]="operador.valor">{{operador.nombre}}</option>
       </select>
