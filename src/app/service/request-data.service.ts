@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 })
 export class RequestDataService {
 
-  private baseUrl = 'http://localhost:8070/servicesREST/utilitarios';
+  private baseUrl = 'http://192.168.6.40:8070/servicesREST/utilitarios';
 
   constructor(private http: HttpClient) { }
 

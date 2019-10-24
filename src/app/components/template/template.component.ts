@@ -4,6 +4,7 @@ import {RequestDataService} from '../../service/request-data.service';
 import {TipoOperacion} from '../../model/requestData/tipoOperacion';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import {TipoOperacionEnum,TipoUsuario} from '../../service/request-data.interface'
+import {NotificationService} from '../../service/notification.service';
 
 @Component({
   selector: 'app-template',
@@ -14,8 +15,10 @@ export class TemplateComponent implements OnInit {
   formulario: FormGroup;
   submitted = false;
   tipoOperaciones: TipoOperacion[];
+  showNumTarjeta: boolean = true;
   showNumCel: boolean = true;
-
+  showOperador: boolean = true;
+  showCodigoUsuario : boolean = true;
   //  requestData: Object ={
   //    operador: "",
   //    tipoOperacion:"",
@@ -46,7 +49,7 @@ export class TemplateComponent implements OnInit {
 
   constructor(
     private requestDataServiceService: RequestDataService,
-    private formBuilder: FormBuilder) 
+    private formBuilder: FormBuilder,private notifyService : NotificationService) 
     { }
 
   ngOnInit() {
@@ -76,19 +79,21 @@ export class TemplateComponent implements OnInit {
     .subscribe(selectedUsuario => {
         if (selectedUsuario == TipoUsuario.Juridico.valor) {
           
-            this.showNumCel = false;  
+            this.showNumTarjeta = false;  
+            this.showCodigoUsuario = true;
             this.formulario.get('numTarjeta').reset(); 
             this.formulario.get('numTarjeta').disable();
-            this.formulario.get('codigoUsuario').reset(); 
+           this.formulario.get('codigoUsuario').reset(); 
             this.formulario.get('codigoUsuario').enable();
         }
         else{
-          this.showNumCel = true;
+          this.showNumTarjeta = true;
+          this.showCodigoUsuario = false;
           this.formulario.get('numTarjeta').enable();
           this.formulario.get('codigoUsuario').disable();
           
         }
-        
+        this.requestData.tipoUsuario = this.formulario.get('usuario').value;
        
     });
 
@@ -101,23 +106,32 @@ export class TemplateComponent implements OnInit {
     this.formulario.get('tipoOperacion').valueChanges
     .subscribe(selectedOperacion => {
         if(selectedOperacion == TipoOperacionEnum.ACTIVAR_SMS){
+          this.showNumCel = false;
+          this.showOperador = false;
+          
           this.formulario.get('numCelular').reset();
           this.formulario.get('numCelular').disable();
           this.formulario.get('operador').reset();
           this.formulario.get('operador').disable();
+
         }
        else if (selectedOperacion == TipoOperacionEnum.CAMBIAR_OPERADOR_CEL) {
+         this.showNumCel = true;
+         this.showOperador = true;
             this.formulario.get('operador').reset();
             this.formulario.get('operador').enable();
             this.formulario.get('numCelular').enable();
-            this.formulario.get('codigoUsuario').enable();
+      
             
         }
          else{
+          this.showOperador = false;
+          this.showNumCel = false;
            this.formulario.get('operador').disable();
            this.formulario.get('numCelular').disable();
          }
          this.requestData.tipoOperacion = this.formulario.get('tipoOperacion').value;
+        
     });
    
 }
@@ -135,23 +149,41 @@ export class TemplateComponent implements OnInit {
         data => {
           console.log(data);
           this.submitted = true;
+     
+          this.showToaster();
         },
+       
         error => console.log(error));
        
-    this.requestData = new RequestData();
+    this.resetar();
+  
+
+    
   }
 
   private estableciendoValores() {
-    this.formulario.controls['numCelular'].disable();
+   // this.formulario.controls['numCelular'].disable();
     this.requestData.tipoUsuario = this.formulario.get('usuario').value;
     this.requestData.numTarjeta = this.formulario.get('numTarjeta').value;
-   // this.requestData.numCelular = this.formulario.get('numCelular').value;
+    this.requestData.numCelular = this.formulario.get('numCelular').value;
    
     this.requestData.operador = this.formulario.get('operador').value;
+    this.requestData.codigoUsuario = this.formulario.get('codigoUsuario').value;
   }
 
   onSubmit() {
     this.save();
+  }
+
+  nuevo(){
+    this.ngOnInit();
+  }
+  showToaster(){
+  	this.notifyService.showSuccess("Transacción realizada!!", "Notificacion")
+  }
+
+  showError(){
+    this.notifyService.showError("Ocurrio un problema inesperado", "Notificacion")
   }
 
 }
